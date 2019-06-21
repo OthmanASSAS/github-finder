@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Users from './components/users/Users';
 import Search from './components/users/Search';
 import Alert from './components/layout/Alert'
+import About from './components/pages/About'
 import axios from 'axios';
 
 
@@ -12,7 +14,7 @@ class App extends Component {
   state = {
     users: [],
     loading: false,
-    alert:null
+    alert: null
   }
 
 
@@ -42,34 +44,44 @@ class App extends Component {
   // Clear users from state
   clearUsers = () => this.setState({ users: [], loading: false })
 
-// Set Alert
-setAlert = (msg, type) => {
+  // Set Alert
+  setAlert = (msg, type) => {
 
-this.setState({alert:{msg, type}});
+    this.setState({ alert: { msg, type } });
 
-}
+  }
 
-clearAlert=()=> this.setState({alert:null})
+  clearAlert = () => this.setState({ alert: null })
 
 
   render() {
     const { users, loading, alert } = this.state;
     return (
-      <div className="App">
+      <Router>
+        <div className="App">
+          <Navbar />
+          <div className="container">
+            <Switch>
 
-        <Navbar />
-        <div className="container">
-          <Alert alert={alert}/>
-          <Search 
-          searchUsers={this.searchUsers} 
-          clearUsers={this.clearUsers} 
-          showClear={users.length > 0} 
-          setAlert={this.setAlert}
-          clearAlert={this.clearAlert}
-          />
-          <Users loading={loading} users={users} />
+            <Route exact path='/' render={props => (
+              <Fragment>
+                <Search
+                  searchUsers={this.searchUsers}
+                  clearUsers={this.clearUsers}
+                  showClear={users.length > 0}
+                  setAlert={this.setAlert}
+                  clearAlert={this.clearAlert}
+                  />
+                <Alert alert={alert} />
+                <Users loading={loading} users={users} />
+              </Fragment>
+            )}>
+            </Route>
+            <Route exact path='/about' component={About}/>
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }
