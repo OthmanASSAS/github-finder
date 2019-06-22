@@ -7,17 +7,32 @@ import {
 } from '../types'
 
 export default (state, action) => {
-    switch(action.type){
+    switch (action.type) {
+
         case SEARCH_USERS:
             return {
                 ...state,
-                users:action.payload,
+                users: action.payload,
+                loading: false
+            }
+
+        case GET_USER:
+            return {
+                ...state,
+                user:action.payload,
                 loading:false
             }
-        case SET_LOADING:
-            return{
+        
+        case CLEAR_USERS:
+            return {
                 ...state,
-                loading:true
+                users: [],
+                loading: false
+            }
+        case SET_LOADING:
+            return {
+                ...state,
+                loading: true
             }
         default:
             return state;
